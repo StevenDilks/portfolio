@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           title: const Text('Steven\'s Portfolio'),
         ),
         body: const SizedBox.expand(
