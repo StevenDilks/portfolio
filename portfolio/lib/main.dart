@@ -1,31 +1,36 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:json_theme/json_theme.dart';
+import 'package:portfolio/screens/home.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final theme = ThemeDecoder.decodeThemeData(
+    jsonDecode(
+      await rootBundle.loadString(
+        'assets/theme.json',
+      ),
+    ),
+  )!;
+
+  runApp(MyApp(theme: theme));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final ThemeData theme;
+
+  const MyApp({
+    super.key,
+    required this.theme,
+  });
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text('Steven\'s Portfolio'),
-        ),
-        body: const SizedBox.expand(
-          child: Center(
-            child: Text('Hello world!'),
-          ),
-        ),
-      ),
+      theme: theme,
+      home: const HomeScreen(),
     );
   }
 }
