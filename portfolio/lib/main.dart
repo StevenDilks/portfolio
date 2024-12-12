@@ -88,7 +88,7 @@ class ResumePage extends StatelessWidget {
                       Obx(
                         () => CircleAvatar(
                           radius: fontSizeController.global.value * 7 + 50,
-                          backgroundImage: AssetImage('headshot.jpg'),
+                          backgroundImage: AssetImage('headshot.png'),
                         ),
                       ),
                       SizedBox(width: 16),
