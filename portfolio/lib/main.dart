@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:get/get.dart';
+import 'package:portfolio/util/bio_widgets.dart';
 import 'package:portfolio/util/experience_card.dart';
-import 'package:portfolio/util/font_size_controller.dart';
+import 'package:portfolio/util/controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() {
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
 class ResumePage extends StatelessWidget {
   ResumePage({super.key});
 
-  final FontSizeController fontSizeController = Get.put(FontSizeController());
+  final AppController controller = Get.put(AppController());
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +38,11 @@ class ResumePage extends StatelessWidget {
         title: Obx(
           () => Text(
             'Steven Dilks',
-            textScaler: TextScaler.linear(fontSizeController.title.value),
+            textScaler: TextScaler.linear(controller.title.value),
             style: TextStyle(color: Colors.white),
           ),
         ),
-        centerTitle: true,
+        centerTitle: !controller.isMobile(),
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
@@ -59,11 +60,11 @@ class ResumePage extends StatelessWidget {
             margin: const EdgeInsets.only(right: 10),
             child: Obx(
               () => Slider(
-                value: fontSizeController.global.value,
+                value: controller.global.value,
                 activeColor: Colors.white,
                 inactiveColor: Colors.white,
                 onChanged: (double val) {
-                  fontSizeController.updateValues(val);
+                  controller.updateValues(val);
                 },
                 divisions: 20,
                 min: 1.0,
@@ -82,60 +83,32 @@ class ResumePage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 16),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Obx(
-                        () => CircleAvatar(
-                          radius: fontSizeController.global.value * 7 + 50,
-                          backgroundImage: AssetImage('headshot.png'),
-                        ),
-                      ),
-                      SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
+                  controller.isMobile()
+                      ? Column(
+                          children: [
+                            circleAvatar,
+                            SizedBox(width: 16),
+                            Expanded(
+                              child: bioText,
+                            ),
+                          ],
+                        )
+                      : Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: 8),
-                            Obx(
-                              () => Text(
-                                'Frontend Engineer',
-                                textScaler: TextScaler.linear(
-                                  fontSizeController.header.value,
-                                ),
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Color(0xFF3B82F6),
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 16),
-                            Obx(
-                              () => Text(
-                                'Passionate and creative Software Engineer with 5 years of experience in creating software solutions.\n'
-                                'Recognized as a hands-on and competent team member in a fast-paced, deadline-driven environment.\n'
-                                'Skilled in crafting responsive, accessible, and performant web applications using modern\n'
-                                'frontend technologies. Committed to staying up-to-date with the latest web standards and\n'
-                                'best practices to deliver exceptional user interfaces.',
-                                textScaler: TextScaler.linear(
-                                  fontSizeController.subtext.value,
-                                ),
-                                style: TextStyle(
-                                  color: Color(0xFF4B5563),
-                                ),
-                              ),
+                            circleAvatar,
+                            SizedBox(width: 16),
+                            Expanded(
+                              child: bioText,
                             ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
                   const SizedBox(height: 32),
                   Obx(
                     () => Text(
                       'Skills',
                       textScaler: TextScaler.linear(
-                        fontSizeController.header.value,
+                        controller.header.value,
                       ),
                       style: TextStyle(
                         fontSize: 20,
@@ -183,7 +156,7 @@ class ResumePage extends StatelessWidget {
                               () => Text(
                                 skill,
                                 textScaler: TextScaler.linear(
-                                  fontSizeController.subtext.value,
+                                  controller.subtext.value,
                                 ),
                               ),
                             ),
@@ -196,7 +169,7 @@ class ResumePage extends StatelessWidget {
                     () => Text(
                       'Experience',
                       textScaler: TextScaler.linear(
-                        fontSizeController.header.value,
+                        controller.header.value,
                       ),
                       style: TextStyle(
                         fontSize: 20,
@@ -208,7 +181,7 @@ class ResumePage extends StatelessWidget {
                   const Divider(),
                   const SizedBox(height: 16),
                   ExperienceCard(
-                    controller: fontSizeController,
+                    controller: controller,
                     title: 'Software Engineer',
                     company: 'Sonavi Labs, Inc. - Remote',
                     period: 'May 2023 - August 2024',
@@ -225,7 +198,7 @@ class ResumePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   ExperienceCard(
-                    controller: fontSizeController,
+                    controller: controller,
                     title: 'Software Engineer',
                     company: 'MindStand Technologies, Inc. - Hybrid',
                     period: 'Aug 2018 - Aug 2022',
@@ -240,7 +213,7 @@ class ResumePage extends StatelessWidget {
                     () => Text(
                       'Education',
                       textScaler: TextScaler.linear(
-                        fontSizeController.header.value,
+                        controller.header.value,
                       ),
                       style: TextStyle(
                         fontSize: 20,
@@ -252,7 +225,7 @@ class ResumePage extends StatelessWidget {
                   const Divider(),
                   const SizedBox(height: 16),
                   ExperienceCard(
-                    controller: fontSizeController,
+                    controller: controller,
                     title:
                         'Bachelor of Science in Computer Science - In Progress',
                     company: 'Western Governers University',
@@ -282,7 +255,7 @@ class ResumePage extends StatelessWidget {
                   ),
                   child: Obx(
                     () => Icon(
-                      size: fontSizeController.icon.value,
+                      size: controller.icon.value,
                       Icons.email_outlined,
                       color: Theme.of(context).colorScheme.onPrimary,
                     ),
@@ -301,7 +274,7 @@ class ResumePage extends StatelessWidget {
                     ),
                     child: Obx(
                       () => Icon(
-                        size: fontSizeController.icon.value,
+                        size: controller.icon.value,
                         FontAwesome5.linkedin,
                         color: Theme.of(context).colorScheme.onPrimary,
                       ),
@@ -314,7 +287,7 @@ class ResumePage extends StatelessWidget {
                   ),
                   child: Obx(
                     () => Icon(
-                      size: fontSizeController.icon.value,
+                      size: controller.icon.value,
                       FontAwesome5.github,
                       color: Theme.of(context).colorScheme.onPrimary,
                     ),

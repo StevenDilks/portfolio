@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:portfolio/util/font_size_controller.dart';
+import 'package:portfolio/util/controller.dart';
 
 class ExperienceCard extends StatelessWidget {
   final String title;
   final String company;
   final String period;
   final List<String> responsibilities;
-  final FontSizeController controller;
+  final AppController controller;
 
   const ExperienceCard({
     super.key,
