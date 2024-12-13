@@ -137,18 +137,8 @@ class ResumePage extends StatelessWidget {
                       'React',
                       'Angular',
                       'HTML/CSS',
-                      'Java',
-                      'Go',
-                      'Python',
-                      'C++',
-                      'C#',
-                      'Linux',
-                      'Bash',
                       'Github',
                       'Jira',
-                      'Google Admin Console',
-                      'Apple Developer/TestFlight',
-                      'Insomnia',
                     ]
                         .map(
                           (skill) => Chip(
